@@ -16,7 +16,7 @@
     <LWSP> = #'\\s*'
     FINDIN = #'Find in '
     FROMLAST = #' from last '
-    WORD = #'[a-z]*'
+    WORD = #'[a-z0-9]*'
     <WORDGRP> = <LWSP> WORD <LWSP>
     SYMBOL = #'\\$[a-z0-9]*'
     <SYMGRP> = <LWSP> SYMBOL <LWSP>
