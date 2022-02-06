@@ -3,16 +3,19 @@
   (:gen-class))
 
 (def query
-  "Find in [worda wordb] from last n hours")
+  "Find in [worda wordb] from last 5 hours")
 
 (def findlast
   (insta/parser
-   "S = LAST LBKT WORD+ RBKT REST
+   "S = FINDIN LBKT WORD+ RBKT FROMLAST HOURS REST
     LBKT = '['
     RBKT = ']'
-    LAST = #'Find in '
+    FINDIN = #'Find in '
+    FROMLAST = #' from last '
     WORD = #'[a-z]*\\s*'
-    REST = #'.*'"))
+    HOURS = #'\\d+'
+    REST = #' hours'"
+   :output-format :enlive))
 
 
 
@@ -23,4 +26,6 @@
 
 
 (comment
-  (findlast query))
+  (findlast query)
+  (doseq [item (:content (findlast query))]
+    (println item)))
