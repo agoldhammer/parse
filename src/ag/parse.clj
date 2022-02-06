@@ -7,12 +7,14 @@
 
 (def findlast
   (insta/parser
-   "S = FINDIN LBKT WORD+ RBKT FROMLAST HOURS REST
+   "S = <FINDIN> <LBKT> WORDGRP+ <RBKT> <FROMLAST> HOURS <REST>
     LBKT = '['
     RBKT = ']'
+    LWSP = #'\\s*'
     FINDIN = #'Find in '
     FROMLAST = #' from last '
-    WORD = #'[a-z]*\\s*'
+    WORD = #'[a-z]*'
+    WORDGRP = WORD LWSP
     HOURS = #'\\d+'
     REST = #' hours'"
    :output-format :enlive))
