@@ -8,32 +8,41 @@
 (def query2
   "Find in [ worda wordb $topic ] from last 2 hours")
 
-(def findlast
+(def query3
+  "Define $fra [Macron Castex]")
+
+(def parse
   (insta/parser
-   "FINDLAST = <FINDIN> <LBKT> SYMORWRDGRP+ <RBKT> <FROMLAST> HOURS <REST>
+   "S = FINDLAST | DEF
+    FINDLAST = <FINDIN> <LBKT> SYMORWRDGRP+ <RBKT> <FROMLAST> HOURS <REST>
     LBKT = '['
     RBKT = ']'
     <LWSP> = #'\\s*'
     FINDIN = #'Find in '
     FROMLAST = #' from last '
-    WORD = #'[a-z0-9]*'
+    WORD = #'[a-zA-Z0-9]+'
     <WORDGRP> = <LWSP> WORD <LWSP>
-    SYMBOL = #'\\$[a-z0-9]*'
-    <SYMGRP> = <LWSP> SYMBOL <LWSP>
+    SYMBOL = #'\\$[a-zA-Z0-9]+'
+    SYMGRP = <LWSP> SYMBOL <LWSP>
     <SYMORWRDGRP> = SYMGRP | WORDGRP
     HOURS = #'\\d+'
-    REST = #' hours'"
+    REST = #' hours'
+    DEF = <DEFPFX> SYMGRP <LBKT> WORDGRP+ <RBKT>
+    DEFPFX = #'Define '
+    "
    :output-format :enlive))
 
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (findlast args))
+  (parse args))
 
 
 (comment
-  (findlast query)
-  (findlast query2)
-  (doseq [item (:content (findlast query))]
+  (parse query)
+  (parse query2)
+  (parse query3)
+  ()
+  (doseq [item (:content (parse query))]
     (println item)))
