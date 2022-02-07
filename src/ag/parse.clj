@@ -11,6 +11,9 @@
 (def query3
   "Define $fra [Macron Castex]")
 
+(def broken1
+  "Define fra [yes no]")
+
 (def parse
   (insta/parser
    "S = FINDLAST | DEF
@@ -43,6 +46,7 @@
   (parse query)
   (parse query2)
   (parse query3)
+  (parse broken1)
   ()
   (doseq [item (:content (parse query))]
     (println item)))
