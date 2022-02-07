@@ -3,23 +3,32 @@
   (:gen-class))
 
 (def query
-  "Find in [worda wordb] from last 25 hours")
+  "Find in [worda wordb] from last 25 hours;\n")
 
 (def query2
-  "Find in [ worda wordb $topic ] from last 2 hours")
+  "Find in [ worda wordb $topic ] from last 2 hours;\n")
 
 (def query3
-  "Define $fra [Macron Castex]")
+  "Define $fra [Macron Castex];\n")
+
+(def query4
+  "Find in [ worda wordb
+   $topic ] from last 2 hours;\n")
 
 (def broken1
-  "Define fra [yes no]")
+  "Define fra [yes no];\n")
+
+(def broken2
+  "Find in [ worda wordb
+   $topic ] from last 2 hours\n") ;; no semi
 
 (def parse
   (insta/parser
-   "S = FINDLAST | DEF
-    FINDLAST = <FINDIN> <LBKT> SYMORWRDGRP+ <RBKT> <FROMLAST> HOURS <REST>
+   "S = (FINDLAST | DEF)
+    FINDLAST = <LWSP> <FINDIN> <LBKT> SYMORWRDGRP+ <RBKT> <FROMLAST> HOURS <REST> <SEMI>
     LBKT = '['
     RBKT = ']'
+    SEMI = ';' <LWSP>
     <LWSP> = #'\\s*'
     FINDIN = #'Find in '
     FROMLAST = #' from last '
@@ -29,8 +38,8 @@
     SYMGRP = <LWSP> SYMBOL <LWSP>
     <SYMORWRDGRP> = SYMGRP | WORDGRP
     HOURS = #'\\d+'
-    REST = #' hours'
-    DEF = <DEFPFX> SYMGRP <LBKT> WORDGRP+ <RBKT>
+    REST = #' hours' <LWSP>
+    DEF = <LWSP> <DEFPFX> SYMGRP <LBKT> WORDGRP+ <RBKT> <LWSP> <SEMI>
     DEFPFX = #'Define '
     "
    :output-format :enlive))
@@ -46,7 +55,16 @@
   (parse query)
   (parse query2)
   (parse query3)
+  (parse query4)
   (parse broken1)
-  ()
+  (parse broken2)
+
+  (parse (str query query3))
+
+  (parse (str query query3 query4))
+
+  (parse (str query broken1 query3 query4))
+
+
   (doseq [item (:content (parse query))]
     (println item)))
