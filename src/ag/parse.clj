@@ -30,17 +30,17 @@
     RBKT = ']'
     SEMI = ';' <LWSP>
     <LWSP> = #'\\s*'
-    FINDIN = #'Find in '
-    FROMLAST = #' from last '
+    FINDIN = 'Find in '
+    FROMLAST = ' from last '
     WORD = #'[a-zA-Z0-9]+'
     <WORDGRP> = <LWSP> WORD <LWSP>
     SYMBOL = #'\\$[a-zA-Z0-9]+'
     SYMGRP = <LWSP> SYMBOL <LWSP>
     <SYMORWRDGRP> = SYMGRP | WORDGRP
     HOURS = #'\\d+'
-    REST = #' hours' <LWSP>
+    REST = ' hours' <LWSP>
     DEF = <LWSP> <DEFPFX> SYMGRP <LBKT> WORDGRP+ <RBKT> <LWSP> <SEMI>
-    DEFPFX = #'Define '
+    DEFPFX = 'Define '
     "
    :output-format :enlive))
 
