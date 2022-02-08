@@ -1,5 +1,5 @@
 # Grammar
 
-Find in [word*] from last n hours
+Find in [word*] from last n hours;
 
-Def $fra [Macron Castex
+Def $fra [Macron Castex $elite];

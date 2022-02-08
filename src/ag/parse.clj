@@ -3,31 +3,31 @@
   (:gen-class))
 
 (def query1
-  "Find in [worda wordb] from last 25 hours;\n")
+  "Find in [worda wordb] from last 25 hours;")
 
 (def query2
-  "Find in [ worda wordb $topic ] from last 2 hours;\n")
+  "Find in [ worda wordb $topic ] from last 2 hours;")
 
 (def query3
-  "Define $fra [Macron Castex];\n")
+  "Define $fra [Macron Castex];")
 
 (def query4
   "Find in [ worda wordb
-   $topic ] from last 2 hours;\n")
+   $topic ] from last 2 hours;")
 
 (def query5
   "Find in [ worda wordb
-   $topic ] from last 2 hours ;\n")
+   $topic ] from last 2 hours ;")
 
 (def query6
-  "Define $felite [$fra Zemmour];\n")
+  "Define $felite [$fra Zemmour];")
 
 (def broken1
-  "Define fra [yes no];\n")
+  "Define fra [yes no];")
 
 (def broken2
   "Find in [ worda wordb
-   $topic ] from last 2 hours\n") ;; no semi
+   $topic ] from last 2 hours") ;; no semi
 
 (def parse
   (insta/parser
@@ -36,7 +36,7 @@
        <FROMLAST> HOURS <REST> <SEMI>
     LBKT = '['
     RBKT = ']'
-    SEMI = ';\n'
+    SEMI = ';'
     FINDIN = 'Find in '
     FROMLAST = 'from last '
     WORD = #'[a-zA-Z0-9]+'
@@ -71,5 +71,5 @@
 
   (mapv parse [broken1 broken2])
 
-  (doseq [item (:content (parse query))]
+  (doseq [item (:content (parse query1))]
     (println item)))
