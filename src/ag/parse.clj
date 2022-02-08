@@ -63,11 +63,6 @@
   (parse broken2)
   (subs query3 11)
 
-  (parse (str query query3))
-
-  (parse (str query query3 query4))
-
-  (parse (str query broken1 query3 query4))
 
 
   (doseq [item (:content (parse query))]
