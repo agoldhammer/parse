@@ -61,11 +61,19 @@
   [symbol vec-of-words]
   (swap! symbol-table assoc symbol vec-of-words))
 
+(defn parse-error
+  "deal with parse error in node"
+  [node msg]
+  (println "error in node" node msg)
+  (throw (Exception. "parse error")))
+
 (defn build-findlast
   "reducing fn to build a findlast command"
   [acc node]
   (let [tag (:tag node)
         content (first (:content node))]
+    (when (and (= tag :SYMBOL) (nil? (get @symbol-table content)))
+      (parse-error node "symbol not defined"))
     (condp = tag
       :WORD (update-in acc [:words] conj content)
       :SYMBOL (update-in acc [:words] into (get @symbol-table content))
@@ -76,6 +84,7 @@
 ;;   {:tag :WORD, :content ("wordb")}
 ;;   {:tag :SYMBOL, :content ("$topic")}
 ;;   {:tag :HOURS, :content ("2")})
+;; TODO error checking
 (defn analyze-findlast
   "analyze the node of type FINDLAST"
   [content]
@@ -110,12 +119,16 @@
 (defn analyze
   "analyze parser output"
   [parsed]
-  (let [node (first parsed)
-        content (:content node)]
-    (condp = (:tag node)
-      :FINDLAST (analyze-findlast content)
-      :DEF (analyze-def content)
-      "No matching node type")))
+  (try
+    (let [node (first parsed)
+          content (:content node)]
+      (when (:index parsed) ;; in case of analyzer error
+        (parse-error parsed "analyzer error"))
+      (condp = (:tag node)
+        :FINDLAST (analyze-findlast content)
+        :DEF (analyze-def content)
+        "No matching node type"))
+    (catch Exception e (str "analyzer error: " (.getMessage e)))))
 
 
 (defn -main
@@ -135,9 +148,12 @@
   (reset-symbol-table!)
   (parse query4)
   (analyze (parse query4))
+  @symbol-table
+  (analyze (parse "Find in [ $nonexistent ] from last 2 hours"))
   (parse query5)
   (parse query6)
   (parse broken1)
+  (analyze (parse broken1))
   (parse broken2)
   (def queries [query1 query2 query3 query4 query5 query6])
   (mapv parse queries)
