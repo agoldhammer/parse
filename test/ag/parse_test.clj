@@ -2,10 +2,6 @@
   (:require [clojure.test :refer [deftest is testing]]
             [ag.parse :as p]))
 
-#_(deftest a-test
-    (testing "FIXME, I fail."
-      (is (= 0 1))))
-
 (def query1
   "Find in [worda wordb] from last 25 hours;")
 
