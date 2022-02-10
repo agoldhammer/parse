@@ -34,50 +34,53 @@
    $topic ] from last 2 hours") ;; no semi
 
 (def queries [query1 query2 query3 query4 query5 query6])
-(def expected-results (quote [({:tag :FINDLAST
-                                :content
-                                ({:tag :WORD, :content ("worda")}
-                                 {:tag :WORD, :content ("wordb")}
-                                 {:tag :HOURS, :content ("25")})})
-                              ({:tag :FINDLAST
-                                :content
-                                ({:tag :WORD, :content ("worda")}
-                                 {:tag :WORD, :content ("wordb")}
-                                 {:tag :SYMBOL, :content ("$topic")}
-                                 {:tag :HOURS, :content ("2")})})
-                              ({:tag :DEF
-                                :content
-                                ({:tag :SYMBOL, :content ("$fra")}
-                                 {:tag :WORD, :content ("Macron")}
-                                 {:tag :WORD, :content ("Castex")})})
-                              ({:tag :FINDLAST
-                                :content
-                                ({:tag :WORD, :content ("worda")}
-                                 {:tag :WORD, :content ("wordb")}
-                                 {:tag :SYMBOL, :content ("$fra")}
-                                 {:tag :HOURS, :content ("2")})})
-                              ({:tag :FINDLAST
-                                :content
-                                ({:tag :WORD, :content ("worda")}
-                                 {:tag :WORD, :content ("wordb")}
-                                 {:tag :SYMBOL, :content ("$topic")}
-                                 {:tag :HOURS, :content ("2")})})
-                              ...]))
+(def expected-parse-results (quote [({:tag :FINDLAST
+                                      :content
+                                      ({:tag :WORD, :content ("worda")}
+                                       {:tag :WORD, :content ("wordb")}
+                                       {:tag :HOURS, :content ("25")})})
+                                    ({:tag :FINDLAST
+                                      :content
+                                      ({:tag :WORD, :content ("worda")}
+                                       {:tag :WORD, :content ("wordb")}
+                                       {:tag :SYMBOL, :content ("$topic")}
+                                       {:tag :HOURS, :content ("2")})})
+                                    ({:tag :DEF
+                                      :content
+                                      ({:tag :SYMBOL, :content ("$fra")}
+                                       {:tag :WORD, :content ("Macron")}
+                                       {:tag :WORD, :content ("Castex")})})
+                                    ({:tag :FINDLAST
+                                      :content
+                                      ({:tag :WORD, :content ("worda")}
+                                       {:tag :WORD, :content ("wordb")}
+                                       {:tag :SYMBOL, :content ("$fra")}
+                                       {:tag :HOURS, :content ("2")})})
+                                    ({:tag :FINDLAST
+                                      :content
+                                      ({:tag :WORD, :content ("worda")}
+                                       {:tag :WORD, :content ("wordb")}
+                                       {:tag :SYMBOL, :content ("$topic")}
+                                       {:tag :HOURS, :content ("2")})})
+                                    ({:tag :DEF
+                                      :content
+                                      ({:tag :SYMBOL, :content ("$felite")}
+                                       {:tag :SYMBOL, :content ("$fra")}
+                                       {:tag :WORD, :content ("Zemmour")})})]))
 (deftest query-test
   (testing "findlast queries"
     (doseq [i (range (count queries))]
-      (is (= (p/parse (nth queries i)) (nth expected-results i))))))
-
-(comment expected-results)
+      (is (= (p/parse (nth queries i)) (nth expected-parse-results i))))))
 
 (comment
+  (p/parse query6)
   (def a '({:tag FINDLAST :content ("words")}))
   a
   (:tag (first a))
-  expected-results
-  (count expected-results)
-  (nth expected-results 4)
-  (= (p/parse query5) (nth expected-results 4))
+  expected-parse-results
+  (count expected-parse-results)
+  (nth expected-parse-results 4)
+  (= (p/parse query5) (nth expected-parse-results 4))
   (count queries)
   (nth queries 2)
   (first queries)
